@@ -1,0 +1,11 @@
+{
+  "name": "jiratimetracker",
+  "version": "0.0.1",
+  "description": "A command-line application to report time worked on JIRA.",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Hunter Jarrell",
+  "license": "MIT"
+}
