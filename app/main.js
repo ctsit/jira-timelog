@@ -25,9 +25,20 @@ program
   .option('-p, --project <project>', 'Filter by project')
   .action(actions.getLoggedWork)
 
+program
+  .command('*')
+  .action(() => { program.help() })
+  .command('')
+  .action(() => { program.help() })
+
 if (!process.env.JTL_USERNAME || !process.env.JTL_PASS) {
   console.log('Please supply your Jira username and password in the JTL_USERNAME and JTL_PASS environment variables.')
   process.exit();
 }
 
+
 program.parse(process.argv)
+
+if (program.args.length === 0) {
+  actions.printCurrentIssue()
+}
