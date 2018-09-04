@@ -1,6 +1,6 @@
 {
   "name": "jira-timelog",
-  "version": "0.0.1",
+  "version": "0.1.0",
   "description": "A command-line application to report time worked on JIRA.",
   "repository": {
     "type": "git",
