@@ -23,8 +23,14 @@ module.exports = {
   },
 
   getLoggedWork: (date, options) => {
-    console.log(date)
-    console.log(options)
+    let workLogPromise = jira.getWorkLog(date)
+    workLogPromise.then((workLogs) => {
+      for (var i = 0; i < workLogs.length; i++) {
+        console.log(workLogs[i].issueId + '   ' + workLogs[i].timeSpent + '   ' + workLogs[i].comment)
+      }
+    }).catch((err) => {
+      console.error(err)
+    })
   }
 
 }
