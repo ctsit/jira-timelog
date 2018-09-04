@@ -55,12 +55,20 @@ module.exports = {
     return issuesPromise
   },
 
-  getWorkLog: (dateWorked) => {
+  getWorkLog: (dateWorked, project) => {
     let workLogPromise = new Promise((resolve, reject) => {
       // Uses JIRA's JQL language to get all open issues for the current user
+      var path = ''
+
+      if (project) {
+        path = encodeURI('/rest/api/2/search?fields=summary,description,worklog&jql=assignee=currentuser() AND worklogDate=' + dateWorked + ' AND project=\'' + project + '\'')
+      } else {
+        path = encodeURI('/rest/api/2/search?fields=summary,description,worklog&jql=assignee=currentuser() AND worklogDate=' + dateWorked)
+      }
+
       const request = https.get({
         hostname: 'jira.ctsi.ufl.edu',
-        path: encodeURI('/rest/api/2/search?fields=summary,description,worklog&jql=assignee=currentuser() AND worklogDate=' + dateWorked),
+        path: path,
         headers: HEADERS,
         agent: false
       }, (response) => {
@@ -75,7 +83,6 @@ module.exports = {
         // Process the final data
         response.on('end', () => {
           let issues = JSON.parse(data.join('')).issues
-
           let trimmedWorklog = []
           // Loop through all issues where there was work done on the date provided
           for (var i = 0; i < issues.length; i++) {
@@ -84,7 +91,6 @@ module.exports = {
             // Loop through each worklog in the issue checking to make sure the date is correct
             for (var j = 0; j < worklogs.length; j++) {
               // The date from JIRA is formated with the time and offset but we only care about date
-              console.log(worklogs[j].updated)
               if (worklogs[j].updated.startsWith(dateWorked)) {
                 trimmedWorklog.push({
                   issueId: issues[i].key,
