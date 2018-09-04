@@ -2,6 +2,8 @@
 
 let jira = require('./jira');
 
+const ISO_REGEX = new RegExp('^\\d{4}\\-(0[1-9]|1[012])\\-(0[1-9]|[12][0-9]|3[01])$');
+
 module.exports = {
 
   printCurrentIssue: (options) => {
@@ -16,6 +18,10 @@ module.exports = {
   },
 
   logWork: (issueId, time, message, options) => {
+    if (options.date && !ISO_REGEX.test(options.date)) {
+      console.log('Please use a correct date in the form of YYYY-MM-DD')
+      return
+    }
     let newWorkLogPromise = jira.addNewWorklog(issueId, time, message, options.date)
     newWorkLogPromise.then(() => {
       console.log('Work was logged successfully')
@@ -26,6 +32,11 @@ module.exports = {
   },
 
   getLoggedWork: (date, options) => {
+    if (!ISO_REGEX.test(date)) {
+      console.log('Please use a correct date in the form of YYYY-MM-DD')
+      return
+    }
+
     let workLogPromise = jira.getWorkLog(date, options.project)
     workLogPromise.then((workLogs) => {
       for (var i = 0; i < workLogs.length; i++) {

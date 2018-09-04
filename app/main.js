@@ -36,7 +36,6 @@ if (!process.env.JTL_USERNAME || !process.env.JTL_PASS) {
   process.exit();
 }
 
-
 program.parse(process.argv)
 
 if (program.args.length === 0) {
