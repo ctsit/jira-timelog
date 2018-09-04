@@ -1,8 +1,8 @@
-'use strict';
+'use strict'
 
-let jira = require('./jira');
+let jira = require('./jira')
 
-const ISO_REGEX = new RegExp('^\\d{4}\\-(0[1-9]|1[012])\\-(0[1-9]|[12][0-9]|3[01])$');
+const ISO_REGEX = new RegExp('^\\d{4}\\-(0[1-9]|1[012])\\-(0[1-9]|[12][0-9]|3[01])$')
 
 module.exports = {
 
@@ -24,10 +24,11 @@ module.exports = {
     }
     let newWorkLogPromise = jira.addNewWorklog(issueId, time, message, options.date)
     newWorkLogPromise.then(() => {
-      console.log('Work was logged successfully')
+      process.exit(0)
     }).catch((err) => {
       console.log('Work was not logged successfully')
       console.error(err)
+      process.exit(1)
     })
   },
 

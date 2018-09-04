@@ -1,4 +1,4 @@
-'use strict';
+'use strict'
 
 const https = require('https')
 const moment = require('moment')
@@ -26,7 +26,7 @@ module.exports = {
         // Add the result to the output as we get it
         response.on('data', (chunk) => {
           data.push(chunk)
-        });
+        })
 
         // Process the final data
         response.on('end', () => {
@@ -78,18 +78,18 @@ module.exports = {
         // Add the result to the output as we get it
         response.on('data', (chunk) => {
           data.push(chunk)
-        });
+        })
 
         // Process the final data
         response.on('end', () => {
           let issues = JSON.parse(data.join('')).issues
           let trimmedWorklog = []
           // Loop through all issues where there was work done on the date provided
-          for (var i = 0; i < issues.length; i++) {
+          for (let i = 0; i < issues.length; i++) {
             var worklogs = issues[i].fields.worklog.worklogs
 
             // Loop through each worklog in the issue checking to make sure the date is correct
-            for (var j = 0; j < worklogs.length; j++) {
+            for (let j = 0; j < worklogs.length; j++) {
               // The date from JIRA is formated with the time and offset but we only care about date
               if (worklogs[j].updated.startsWith(dateWorked)) {
                 trimmedWorklog.push({
@@ -132,7 +132,7 @@ module.exports = {
         // Add the result to the output as we get it
         response.on('data', (chunk) => {
           data.push(chunk)
-        });
+        })
 
         // Called when everything finishes
         response.on('end', () => {

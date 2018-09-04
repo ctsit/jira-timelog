@@ -1,4 +1,4 @@
-'use strict';
+'use strict'
 
 const program = require('commander')
 const pkg = require('../package.json')
@@ -33,7 +33,7 @@ program
 
 if (!process.env.JTL_USERNAME || !process.env.JTL_PASS) {
   console.log('Please supply your Jira username and password in the JTL_USERNAME and JTL_PASS environment variables.')
-  process.exit();
+  process.exit()
 }
 
 program.parse(process.argv)
