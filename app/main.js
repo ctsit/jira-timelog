@@ -10,12 +10,12 @@ program
 
 program
   .command('list')
-  .description('Print current tasks assigned.')
-  .action(actions.printCurrentTask)
+  .description('Print current issues assigned to you.')
+  .action(actions.printCurrentIssue)
 
 program
-  .command('log <taskId> <time> [message]')
-  .description('Log hours worked for a specific task with an optional message.')
+  .command('log <issueId> <time> [message]')
+  .description('Log hours worked for a specific issue with an optional message.')
   .option('-D, --date <date>', 'Log a specific date instead of today.')
   .action(actions.logWork)
 

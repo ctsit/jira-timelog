@@ -4,19 +4,19 @@ let jira = require('./jira');
 
 module.exports = {
 
-  printCurrentTask: (options) => {
-    let issuesPromise = jira.getUsersTasks()
-    issuesPromise.then((tasks) => {
-      for (var i = 0; i < tasks.length; i++) {
-        console.log(tasks[i].key + '  ' + tasks[i].name)
+  printCurrentIssue: (options) => {
+    let issuesPromise = jira.getUsersIssues()
+    issuesPromise.then((issues) => {
+      for (var i = 0; i < issues.length; i++) {
+        console.log(issues[i].key + '  ' + issues[i].name)
       }
     }).catch((err) => {
       console.err(err)
     })
   },
 
-  logWork: (taskId, time, message, options) => {
-    let newWorkLogPromise = jira.addNewWorklog(taskId, time, message, options.date)
+  logWork: (issueId, time, message, options) => {
+    let newWorkLogPromise = jira.addNewWorklog(issueId, time, message, options.date)
     newWorkLogPromise.then(() => {
       console.log('Work was logged successfully')
     }).catch((err) => {

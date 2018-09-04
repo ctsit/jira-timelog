@@ -10,7 +10,7 @@ const HEADERS = {
 
 module.exports = {
 
-  getUsersTasks: () => {
+  getUsersIssues: () => {
     // Return a promise since the GET request is async
     let issuesPromise = new Promise((resolve, reject) => {
       // Uses JIRA's JQL language to get all open issues for the current user
