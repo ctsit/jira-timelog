@@ -1,9 +1,12 @@
 'use strict';
 
+let jira = require('./jira');
+
 module.exports = {
 
   printCurrentTask: (options) => {
-    console.log(options)
+    // Prints the issue ID and name to console.
+    jira.getUsersTasks();
   },
 
   logWork: (taskId, time, message, options) => {
