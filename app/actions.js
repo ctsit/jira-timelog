@@ -16,10 +16,13 @@ module.exports = {
   },
 
   logWork: (taskId, time, message, options) => {
-    console.log(taskId)
-    console.log(time)
-    console.log(message)
-    console.log(options)
+    let newWorkLogPromise = jira.addNewWorklog(taskId, time, message, options.date)
+    newWorkLogPromise.then(() => {
+      console.log('Work was logged successfully')
+    }).catch((err) => {
+      console.log('Work was not logged successfully')
+      console.error(err)
+    })
   },
 
   getLoggedWork: (date, options) => {
