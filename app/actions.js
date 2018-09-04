@@ -5,8 +5,14 @@ let jira = require('./jira');
 module.exports = {
 
   printCurrentTask: (options) => {
-    // Prints the issue ID and name to console.
-    jira.getUsersTasks();
+    let issuesPromise = jira.getUsersTasks()
+    issuesPromise.then((tasks) => {
+      for (var i = 0; i < tasks.length; i++) {
+        console.log(tasks[i].key + '  ' + tasks[i].name)
+      }
+    }).catch((err) => {
+      console.err(err)
+    })
   },
 
   logWork: (taskId, time, message, options) => {
