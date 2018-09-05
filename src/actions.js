@@ -23,7 +23,8 @@ module.exports = {
       return
     }
     let newWorkLogPromise = jira.addNewWorklog(issueId, time, message, options.date)
-    newWorkLogPromise.then(() => {
+    newWorkLogPromise.then((ids) => {
+      console.log(ids.issueId + ' ' + ids.worklogId)
       process.exit(0)
     }).catch((err) => {
       console.log('Work was not logged successfully')
@@ -45,6 +46,16 @@ module.exports = {
       }
     }).catch((err) => {
       console.error(err)
+    })
+  },
+
+  deleteWorklog: (issueId, worklogId) => {
+    let worklogDeletePromise = jira.deleteWorklog(issueId, worklogId)
+    worklogDeletePromise.then((result) => {
+      process.exit(0)
+    }).catch((err) => {
+      console.error(err)
+      process.exit(1)
     })
   }
 

@@ -26,6 +26,11 @@ program
   .action(actions.getLoggedWork)
 
 program
+  .command('rm <issueId> <worklogId>')
+  .description('Delete a worklog from an issue.')
+  .action(actions.deleteWorklog)
+
+program
   .command('*')
   .action(() => { program.help() })
   .command('')

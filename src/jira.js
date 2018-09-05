@@ -136,7 +136,10 @@ module.exports = {
 
         // Called when everything finishes
         response.on('end', () => {
-          resolve()
+          const worklogResp = JSON.parse(data.join(''))
+
+          const ids = { issueId: worklogResp.issueId, worklogId: worklogResp.id }
+          resolve(ids)
         })
       })
 
@@ -160,6 +163,32 @@ module.exports = {
     })
 
     return newWorkLogPromise
+  },
+
+  deleteWorklog: (issueId, worklogId) => {
+    let deleteWorkLogPromise = new Promise((resolve, reject) => {
+      const request = https.request({
+        hostname: 'jira.ctsi.ufl.edu',
+        path: '/rest/api/2/issue/' + issueId + '/worklog/' + worklogId,
+        headers: HEADERS,
+        agent: false,
+        method: 'DELETE'
+      }, (response) => {
+        if (response.statusCode === 403) {
+          reject(Error('You do not have permission to delete that worklog'))
+        } else if (response.statusCode === 400) {
+          reject(Error('Input is invalid'))
+        } else if (response.statusCode === 204) {
+          resolve()
+        } else {
+          reject(Error('Unknown response'))
+        }
+      })
+      request.write(JSON.stringify({}))
+      request.end()
+    })
+
+    return deleteWorkLogPromise
   }
 
 }
