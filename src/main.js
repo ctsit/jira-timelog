@@ -4,6 +4,10 @@ const program = require('commander')
 const pkg = require('../package.json')
 const actions = require('./actions.js')
 
+module.exports = {
+  COMMAND_RAN: false
+}
+
 program
   .version(pkg.version)
   .description(pkg.description)
@@ -23,6 +27,7 @@ program
   .command('logs <date>')
   .description('Print all times worked for a specific date.')
   .option('-p, --project <project>', 'Filter by project')
+  .option('-S, --sum', 'Sum up hours worked.')
   .action(actions.getLoggedWork)
 
 program
@@ -43,6 +48,6 @@ if (!process.env.JTL_USERNAME || !process.env.JTL_PASS) {
 
 program.parse(process.argv)
 
-if (program.args.length === 0) {
+if (!this.COMMAND_RAN) {
   actions.printCurrentIssue()
 }

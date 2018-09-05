@@ -95,7 +95,8 @@ module.exports = {
                 trimmedWorklog.push({
                   issueId: issues[i].key,
                   timeSpent: worklogs[j].timeSpent,
-                  comment: worklogs[j].comment
+                  comment: worklogs[j].comment,
+                  timeSpentSeconds: worklogs[j].timeSpentSeconds
                 })
               }
             }
