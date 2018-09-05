@@ -25,14 +25,22 @@ module.exports = {
       console.log('Please use a correct date in the form of YYYY-MM-DD')
       return
     }
-    let newWorkLogPromise = jira.addNewWorklog(issueId, time, message, options.date)
-    newWorkLogPromise.then((ids) => {
-      console.log(ids.issueId + ' ' + ids.worklogId)
-      process.exit(0)
-    }).catch((err) => {
-      console.log('Work was not logged successfully')
-      console.error(err)
-      process.exit(1)
+
+    let issuesPromise = jira.getUsersIssues()
+    issuesPromise.then((issues) => {
+      const issueIds = issues.map((issue) => { return issue.key })
+      if (!(issueId in issueIds)) {
+        console.log('WARNING: You are not assigned to this issue. Use jtl rm issueId worklogId to delete this worklog.')
+      }
+      let newWorkLogPromise = jira.addNewWorklog(issueId, time, message, options.date)
+      newWorkLogPromise.then((ids) => {
+        console.log(ids.issueId + ' ' + ids.worklogId)
+        process.exit(0)
+      }).catch((err) => {
+        console.log('Work was not logged successfully')
+        console.error(err)
+        process.exit(1)
+      })
     })
   },
 
