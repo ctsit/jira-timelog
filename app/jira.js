@@ -61,9 +61,9 @@ module.exports = {
       var path = ''
 
       if (project) {
-        path = encodeURI('/rest/api/2/search?fields=summary,description,worklog&jql=assignee=currentuser() AND worklogDate=' + dateWorked + ' AND project=\'' + project + '\'')
+        path = encodeURI('/rest/api/2/search?fields=summary,description,worklog&jql=assignee=currentuser() AND worklogAuthor=currentUser() AND worklogDate=' + dateWorked + ' AND project=\'' + project + '\'')
       } else {
-        path = encodeURI('/rest/api/2/search?fields=summary,description,worklog&jql=assignee=currentuser() AND worklogDate=' + dateWorked)
+        path = encodeURI('/rest/api/2/search?fields=summary,description,worklog&jql=assignee=currentuser() AND worklogAuthor=currentUser() AND worklogDate=' + dateWorked)
       }
 
       const request = https.get({
@@ -91,7 +91,7 @@ module.exports = {
             // Loop through each worklog in the issue checking to make sure the date is correct
             for (let j = 0; j < worklogs.length; j++) {
               // The date from JIRA is formated with the time and offset but we only care about date
-              if (worklogs[j].updated.startsWith(dateWorked)) {
+              if (worklogs[j].updated.startsWith(dateWorked) && worklogs[j].author.name === process.env.JTL_USERNAME) {
                 trimmedWorklog.push({
                   issueId: issues[i].key,
                   timeSpent: worklogs[j].timeSpent,
