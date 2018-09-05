@@ -91,7 +91,7 @@ module.exports = {
             // Loop through each worklog in the issue checking to make sure the date is correct
             for (let j = 0; j < worklogs.length; j++) {
               // The date from JIRA is formated with the time and offset but we only care about date
-              if (worklogs[j].updated.startsWith(dateWorked) && worklogs[j].author.name === process.env.JTL_USERNAME) {
+              if (worklogs[j].started.startsWith(dateWorked) && worklogs[j].author.name === process.env.JTL_USERNAME) {
                 trimmedWorklog.push({
                   issueId: issues[i].key,
                   timeSpent: worklogs[j].timeSpent,
