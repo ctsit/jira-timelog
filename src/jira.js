@@ -61,9 +61,9 @@ module.exports = {
       var path = ''
 
       if (project) {
-        path = encodeURI('/rest/api/2/search?fields=summary,description,worklog&jql=assignee=currentuser() AND worklogDate=' + dateWorked + ' AND project=\'' + project + '\'')
+        path = encodeURI('/rest/api/2/search?fields=summary,description,worklog&jql=assignee=currentuser() AND worklogAuthor=currentUser() AND worklogDate=' + dateWorked + ' AND project=\'' + project + '\'')
       } else {
-        path = encodeURI('/rest/api/2/search?fields=summary,description,worklog&jql=assignee=currentuser() AND worklogDate=' + dateWorked)
+        path = encodeURI('/rest/api/2/search?fields=summary,description,worklog&jql=assignee=currentuser() AND worklogAuthor=currentUser() AND worklogDate=' + dateWorked)
       }
 
       const request = https.get({
@@ -91,11 +91,12 @@ module.exports = {
             // Loop through each worklog in the issue checking to make sure the date is correct
             for (let j = 0; j < worklogs.length; j++) {
               // The date from JIRA is formated with the time and offset but we only care about date
-              if (worklogs[j].updated.startsWith(dateWorked)) {
+              if (worklogs[j].started.startsWith(dateWorked) && worklogs[j].author.name === process.env.JTL_USERNAME) {
                 trimmedWorklog.push({
                   issueId: issues[i].key,
                   timeSpent: worklogs[j].timeSpent,
-                  comment: worklogs[j].comment
+                  comment: worklogs[j].comment,
+                  timeSpentSeconds: worklogs[j].timeSpentSeconds
                 })
               }
             }
@@ -136,7 +137,10 @@ module.exports = {
 
         // Called when everything finishes
         response.on('end', () => {
-          resolve()
+          const worklogResp = JSON.parse(data.join(''))
+
+          const ids = { issueId: worklogResp.issueId, worklogId: worklogResp.id }
+          resolve(ids)
         })
       })
 
@@ -160,6 +164,32 @@ module.exports = {
     })
 
     return newWorkLogPromise
+  },
+
+  deleteWorklog: (issueId, worklogId) => {
+    let deleteWorkLogPromise = new Promise((resolve, reject) => {
+      const request = https.request({
+        hostname: 'jira.ctsi.ufl.edu',
+        path: '/rest/api/2/issue/' + issueId + '/worklog/' + worklogId,
+        headers: HEADERS,
+        agent: false,
+        method: 'DELETE'
+      }, (response) => {
+        if (response.statusCode === 403) {
+          reject(Error('You do not have permission to delete that worklog'))
+        } else if (response.statusCode === 400) {
+          reject(Error('Input is invalid'))
+        } else if (response.statusCode === 204) {
+          resolve()
+        } else {
+          reject(Error('Unknown response'))
+        }
+      })
+      request.write(JSON.stringify({}))
+      request.end()
+    })
+
+    return deleteWorkLogPromise
   }
 
 }
