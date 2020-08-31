@@ -2,6 +2,10 @@
 
 Command-line Time Logger for Jira
 
+## WARNING
+
+***PLEASE NOTE:*** This was a learning project and is **NOT** actively maintained.
+
 ## Usage
 
 First setup the necessary environment variables: JTL_USERNAME and JTL_PASS. You can do this using:
